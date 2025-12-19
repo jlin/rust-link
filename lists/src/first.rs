@@ -43,6 +43,20 @@ impl List {
     }
 }
 
+// crazy drop to avoid recursion
+impl Drop for List {
+    fn drop(&mut self) {
+        let mut cur_link = mem::replace(&mut self.head, Link::Empty);
+        // while let == do this until pattern doesn't match
+        while let Link::More(mut boxed_node)= cur_link {
+            cur_link = mem::replace(&mut boxed_node.next, Link::Empty);
+            // boxed_node goes out of scope, gets dropped
+            // next is replaced with empty, so doesn't need recursion.
+        }
+    }
+
+}
+
 #[cfg(test)]
 mod test {
     use super::List;
