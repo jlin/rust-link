@@ -43,10 +43,42 @@ impl List {
     }
 }
 
+#[cfg(test)]
 mod test {
+    use super::List;
     #[test]
     fn basics() {
-        // do something
+        let mut list = List::new();
+
+        // check empty list behaves correctly
+        assert_eq!(list.pop(), None);
+
+        // populate list
+        list.push(1);
+        list.push(2);
+        list.push(3);
+
+        // check normal removal
+
+        assert_eq!(list.pop(), Some(3));
+        assert_eq!(list.pop(), Some(2));
+
+        // push more stuff
+
+        list.push(4);
+        list.push(5);
+
+        // check normal removal
+
+        assert_eq!(list.pop(), Some(5));
+        assert_eq!(list.pop(), Some(4));
+
+        // check exhaustion
+
+        assert_eq!(list.pop(), Some(1));
+        assert_eq!(list.pop(), None);
+
+
     }
 
 }
