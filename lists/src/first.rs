@@ -42,3 +42,11 @@ impl List {
     }
     }
 }
+
+mod test {
+    #[test]
+    fn basics() {
+        // do something
+    }
+
+}
