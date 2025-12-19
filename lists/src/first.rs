@@ -40,6 +40,5 @@ impl List {
             Some(node.elem)
         }
     }
-    //result
     }
 }
