@@ -4,6 +4,8 @@ pub struct List<T> {
     head: Link<T>,
 }
 
+pub struct IntoIter<T>(List<T>);
+
 // type alias!!
 type Link<T> = Option<Box<Node<T>>>;
 
@@ -16,6 +18,10 @@ struct Node<T> {
 impl<T> List<T> {
     pub fn new() -> Self {
         List { head: None }
+    }
+
+    pub fn into_iter(self) -> IntoIter<T>{
+        IntoIter(self)
     }
 
     pub fn push(&mut self, elem: T){
@@ -44,6 +50,14 @@ impl<T> List<T> {
         self.head.as_mut().map(|node| {
             &mut node.elem
         })
+    }
+}
+
+impl<T> Iterator for IntoIter<T> {
+    type Item = T;
+    fn next(&mut self) -> Option<Self::Item> {
+        // access fields of tuble struct numerically
+        self.0.pop()
     }
 }
 
