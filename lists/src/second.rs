@@ -6,6 +6,9 @@ pub struct List<T> {
 
 pub struct IntoIter<T>(List<T>);
 
+pub struct Iter<'a, T>{
+    next: Option<&'a Node<T>>,
+}
 // type alias!!
 type Link<T> = Option<Box<Node<T>>>;
 
@@ -13,6 +16,13 @@ type Link<T> = Option<Box<Node<T>>>;
 struct Node<T> {
     elem: T,
     next: Link<T>,
+}
+
+impl<T> List<T>{
+
+    pub fn iter<'a>(&'a self) -> Iter<'a, T> {
+        Iter { next: self.head.as_deref()}
+    }
 }
 
 impl<T> List<T> {
@@ -58,6 +68,17 @@ impl<T> Iterator for IntoIter<T> {
     fn next(&mut self) -> Option<Self::Item> {
         // access fields of tuble struct numerically
         self.0.pop()
+    }
+}
+
+impl<'a, T> Iterator for Iter<'a, T>{
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.map(|node| {
+            self.next = node.next.as_deref();
+            &node.elem
+        })
     }
 }
 
