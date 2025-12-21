@@ -31,7 +31,27 @@ impl<T> List<T> {
     pub fn head(&self) -> Option<&T> {
         self.head.as_ref().map(|node| &node.elem)
     }
+
+    pub fn iter(&self) -> Iter<'_, T> {
+        Iter { next: self.head.as_deref() }
+    }
 }
+
+pub struct Iter<'a, T> {
+    next: Option<&'a Node<T>>,
+}
+
+impl<'a, T> Iterator for Iter<'a, T> {
+    type Item = &'a T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        self.next.map(|node| {
+            self.next = node.next.as_deref();
+            &node.elem
+        })
+    }
+}
+
 
 
 #[cfg(test)]
@@ -62,5 +82,14 @@ mod test{
 
     }
 
+    #[test]
+    fn iter() {
+        let list = List::new().prepend(1).prepend(2).prepend(3);
+
+        let mut iter = list.iter();
+        assert_eq!(iter.next(), Some(&3));
+        assert_eq!(iter.next(), Some(&2));
+        assert_eq!(iter.next(), Some(&1));
+    }
 
 }
