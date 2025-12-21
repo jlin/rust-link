@@ -4,6 +4,14 @@ pub struct List<T> {
     head: Link<T>,
 }
 
+struct Node<T> {
+    elem: T,
+    next: Link<T>,
+}
+
+// type alias!!
+type Link<T> = Option<Box<Node<T>>>;
+
 pub struct IntoIter<T>(List<T>);
 
 pub struct Iter<'a, T>{
@@ -12,14 +20,6 @@ pub struct Iter<'a, T>{
 
 pub struct IterMut<'a, T>{
     next: Option<&'a mut Node<T>>,
-}
-// type alias!!
-type Link<T> = Option<Box<Node<T>>>;
-
-
-struct Node<T> {
-    elem: T,
-    next: Link<T>,
 }
 
 // don't actually need lifetimes since elision works
